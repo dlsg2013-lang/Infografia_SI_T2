@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Metodología · Geoinformación y SSP | Infografía Dinámica</title>
+    <title>Metodología Interactiva · Geoinformación y SSP</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
@@ -16,32 +16,19 @@
             font-family: 'Inter', sans-serif;
             background: #E8E3E0;
             color: #22320A;
-            line-height: 1.6;
             overflow-x: hidden;
+            cursor: crosshair;
         }
 
-        /* Partículas de fondo */
-        .particles {
+        /* Fondo de partículas que reaccionan */
+        .particle-bg {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            pointer-events: none;
             z-index: 0;
-            overflow: hidden;
-        }
-        .particle {
-            position: absolute;
-            background: rgba(76, 110, 32, 0.15);
-            border-radius: 50%;
-            animation: floatUp linear infinite;
-        }
-        @keyframes floatUp {
-            0% { transform: translateY(100vh) scale(0); opacity: 0; }
-            10% { opacity: 1; }
-            90% { opacity: 1; }
-            100% { transform: translateY(-10vh) scale(1); opacity: 0; }
+            pointer-events: none;
         }
 
         /* Barra de progreso */
@@ -52,63 +39,70 @@
             height: 3px;
             background: #4C6E20;
             z-index: 1000;
-            transition: width 0.2s ease;
+            transition: width 0.2s;
         }
 
         .container {
-            max-width: 1000px;
+            position: relative;
+            z-index: 2;
+            max-width: 1200px;
             margin: 0 auto;
             padding: 2rem 1.5rem;
-            position: relative;
-            z-index: 1;
+            cursor: auto;
         }
 
-        /* Hero */
+        /* Hero con efecto glitch suave */
         .hero {
             text-align: center;
-            margin-bottom: 3rem;
             padding: 3rem 2rem;
             background: rgba(255,255,255,0.5);
-            backdrop-filter: blur(12px);
-            border-radius: 2rem;
+            backdrop-filter: blur(15px);
+            border-radius: 3rem;
             border: 1px solid rgba(76,110,32,0.2);
-            box-shadow: 0 20px 40px rgba(34,50,10,0.08);
+            box-shadow: 0 30px 60px rgba(34,50,10,0.1);
+            margin-bottom: 3rem;
             transform-style: preserve-3d;
-            transition: transform 0.3s ease;
+            transition: transform 0.4s;
+            animation: floatHero 6s ease-in-out infinite;
+        }
+        @keyframes floatHero {
+            0%, 100% { transform: translateY(0) rotateX(2deg); }
+            50% { transform: translateY(-8px) rotateX(-1deg); }
         }
         .hero:hover {
-            transform: translateZ(10px);
+            transform: translateY(-5px) scale(1.01);
+            box-shadow: 0 40px 80px rgba(34,50,10,0.15);
         }
         .hero h1 {
-            font-size: 2.2rem;
+            font-size: 2.4rem;
             font-weight: 700;
             color: #22320A;
-            margin-bottom: 0.5rem;
+            margin-bottom: 1rem;
         }
         .hero h1 i {
             color: #4C6E20;
-            animation: pulse 2s infinite;
+            animation: pulseIcon 2s infinite;
         }
-        @keyframes pulse {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.1); }
-            100% { transform: scale(1); }
+        @keyframes pulseIcon {
+            0% { text-shadow: 0 0 0 rgba(76,110,32,0); }
+            50% { text-shadow: 0 0 15px rgba(76,110,32,0.5); }
+            100% { text-shadow: 0 0 0 rgba(76,110,32,0); }
         }
         .badge-group {
             display: flex;
             justify-content: center;
             flex-wrap: wrap;
-            gap: 0.6rem;
-            margin: 1rem 0;
+            gap: 0.8rem;
+            margin: 1.2rem 0;
         }
         .badge {
             background: #22320A;
             color: #E8E3E0;
             font-size: 0.7rem;
             font-weight: 600;
-            padding: 0.3rem 1rem;
+            padding: 0.3rem 1.2rem;
             border-radius: 30px;
-            letter-spacing: 0.3px;
+            letter-spacing: 0.5px;
         }
         .badge-light {
             background: #4C6E20;
@@ -118,163 +112,224 @@
             font-weight: 500;
             background: rgba(76,110,32,0.1);
             display: inline-block;
-            padding: 0.3rem 1.2rem;
+            padding: 0.4rem 1.5rem;
             border-radius: 30px;
             margin-top: 0.5rem;
         }
 
-        /* Secciones con animación de entrada */
-        .section {
-            margin-bottom: 2.5rem;
-            opacity: 0;
-            transform: translateY(30px);
-            transition: opacity 0.6s ease, transform 0.6s ease;
+        /* Mapa conceptual SVG interactivo */
+        .svg-map-section {
+            display: flex;
+            justify-content: center;
+            margin: 2rem 0;
         }
-        .section.visible {
-            opacity: 1;
-            transform: translateY(0);
+        .svg-map-container {
+            position: relative;
+            width: 100%;
+            max-width: 700px;
+            filter: drop-shadow(0 10px 20px rgba(34,50,10,0.15));
+        }
+        .svg-map-container svg {
+            width: 100%;
+            height: auto;
+        }
+        .map-node {
+            cursor: pointer;
+            transition: transform 0.3s, filter 0.3s;
+        }
+        .map-node:hover {
+            transform: scale(1.08);
+            filter: brightness(1.1);
+            outline: none;
+        }
+        .map-node-text {
+            pointer-events: none;
+            user-select: none;
         }
 
-        /* Tarjetas 3D */
-        .card-3d {
-            background: rgba(255,255,255,0.6);
-            backdrop-filter: blur(10px);
-            border-radius: 1.5rem;
-            padding: 1.8rem;
-            border: 1px solid rgba(76,110,32,0.3);
-            box-shadow: 0 10px 25px rgba(34,50,10,0.05);
-            transform-style: preserve-3d;
-            transition: transform 0.4s ease, box-shadow 0.4s ease;
-            cursor: default;
+        /* Ventana flotante (modal) para detalles */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.4);
+            backdrop-filter: blur(8px);
+            z-index: 200;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.35s ease;
         }
-        .card-3d:hover {
-            transform: rotateX(2deg) rotateY(2deg) translateZ(15px);
-            box-shadow: 0 25px 45px rgba(34,50,10,0.12);
+        .modal-overlay.active {
+            opacity: 1;
+            pointer-events: auto;
         }
-        .card-3d h2 {
-            font-size: 1.3rem;
-            font-weight: 700;
+        .modal-window {
+            background: rgba(255,255,255,0.7);
+            backdrop-filter: blur(20px);
+            border-radius: 2rem;
+            padding: 2.5rem;
+            max-width: 650px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+            border: 1px solid rgba(76,110,32,0.4);
+            box-shadow: 0 40px 80px rgba(0,0,0,0.2);
+            position: relative;
+            transform: scale(0.9) translateY(20px);
+            transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+        .modal-overlay.active .modal-window {
+            transform: scale(1) translateY(0);
+        }
+        .modal-close {
+            position: absolute;
+            top: 1rem;
+            right: 1.5rem;
+            background: none;
+            border: none;
+            font-size: 1.8rem;
+            cursor: pointer;
+            color: #4C6E20;
+            transition: transform 0.3s;
+        }
+        .modal-close:hover {
+            transform: rotate(90deg) scale(1.2);
+        }
+        .modal-window h2 {
+            font-size: 1.5rem;
             color: #22320A;
             margin-bottom: 1rem;
             display: flex;
             align-items: center;
-            gap: 0.6rem;
+            gap: 0.8rem;
         }
-        .card-3d h2 i {
+        .modal-window h2 i {
             color: #4C6E20;
-            font-size: 1.3rem;
             background: rgba(76,110,32,0.1);
             padding: 0.6rem;
             border-radius: 50%;
         }
-        .grid-2col {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 1.8rem;
-        }
-        @media (max-width: 720px) {
-            .grid-2col {
-                grid-template-columns: 1fr;
-            }
-        }
-
-        /* Línea de tiempo interactiva */
-        .timeline {
-            position: relative;
-            padding-left: 3rem;
-            margin: 2rem 0;
-        }
-        .timeline::before {
-            content: '';
-            position: absolute;
-            left: 1.1rem;
-            top: 0;
-            bottom: 0;
-            width: 2px;
-            background: #CCCFC2;
-        }
-        .timeline-item {
-            position: relative;
-            margin-bottom: 2rem;
-            opacity: 0;
-            transform: translateX(-20px);
-            transition: all 0.5s ease;
-        }
-        .timeline-item.visible {
-            opacity: 1;
-            transform: translateX(0);
-        }
-        .timeline-dot {
-            position: absolute;
-            left: -2.4rem;
-            top: 0.3rem;
-            width: 1.1rem;
-            height: 1.1rem;
-            background: #4C6E20;
-            border-radius: 50%;
-            box-shadow: 0 0 0 4px #E8E3E0, 0 3px 8px rgba(0,0,0,0.15);
-            transition: transform 0.3s ease;
-            cursor: pointer;
-        }
-        .timeline-item:hover .timeline-dot {
-            transform: scale(1.3);
-            background: #22320A;
-        }
-        .timeline-content {
-            background: rgba(255,255,255,0.5);
-            backdrop-filter: blur(6px);
-            border-radius: 1rem;
-            padding: 1.2rem 1.5rem;
-            border: 1px solid rgba(76,110,32,0.2);
-        }
-
-        /* Acordeón elegante */
-        details.accordion {
-            margin-bottom: 1rem;
-            background: rgba(255,255,255,0.5);
-            backdrop-filter: blur(8px);
-            border-radius: 1rem;
-            border: 1px solid rgba(76,110,32,0.3);
-            overflow: hidden;
-            transition: box-shadow 0.3s;
-        }
-        details.accordion:hover {
-            box-shadow: 0 8px 20px rgba(0,0,0,0.05);
-        }
-        details.accordion summary {
-            padding: 1rem 1.5rem;
-            font-weight: 600;
-            cursor: pointer;
-            list-style: none;
-            display: flex;
-            align-items: center;
-            gap: 0.7rem;
+        .modal-content {
+            font-size: 0.9rem;
+            line-height: 1.6;
             color: #22320A;
         }
-        details.accordion summary::-webkit-details-marker {
-            display: none;
+        .modal-content ul, .modal-content ol {
+            padding-left: 1.5rem;
+            margin: 0.6rem 0;
         }
-        details.accordion summary i {
-            color: #4C6E20;
-        }
-        details.accordion .accordion-content {
-            padding: 0 1.5rem 1.2rem;
-            font-size: 0.85rem;
-            line-height: 1.5;
+        .modal-content li {
+            margin-bottom: 0.4rem;
         }
 
-        /* Lista de referencias compacta */
-        .ref-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
-            gap: 0.8rem;
+        /* Diagrama PRISMA interactivo */
+        .prisma-section {
+            margin: 3rem 0;
+        }
+        .prisma-flow {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 1.5rem;
+        }
+        .prisma-step {
+            background: rgba(255,255,255,0.6);
+            backdrop-filter: blur(10px);
+            border-radius: 1.5rem;
+            padding: 1.5rem;
+            flex: 1 1 180px;
+            max-width: 220px;
+            border: 1px solid rgba(76,110,32,0.3);
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.4s;
+            position: relative;
+        }
+        .prisma-step:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 35px rgba(34,50,10,0.12);
+            background: rgba(255,255,255,0.8);
+        }
+        .prisma-step i {
+            font-size: 2rem;
+            color: #4C6E20;
+            margin-bottom: 0.5rem;
+        }
+        .prisma-step .step-number {
+            font-weight: 700;
+            font-size: 1rem;
+            color: #22320A;
+        }
+        .prisma-tooltip {
+            position: absolute;
+            bottom: -20px;
+            left: 50%;
+            transform: translateX(-50%) translateY(10px);
+            background: #22320A;
+            color: #E8E3E0;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
             font-size: 0.7rem;
+            white-space: nowrap;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s, transform 0.3s;
+            z-index: 10;
+        }
+        .prisma-step:hover .prisma-tooltip {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+        }
+
+        /* Buscador de referencias */
+        .ref-search {
+            margin: 2rem 0;
+        }
+        .ref-search input {
+            width: 100%;
+            padding: 1rem 1.5rem;
+            border-radius: 50px;
+            border: 1px solid #CCCFC2;
+            background: rgba(255,255,255,0.7);
+            backdrop-filter: blur(10px);
+            font-family: 'Inter', sans-serif;
+            font-size: 0.9rem;
+            color: #22320A;
+            outline: none;
+            transition: box-shadow 0.3s;
+        }
+        .ref-search input:focus {
+            box-shadow: 0 0 0 3px rgba(76,110,32,0.3);
+        }
+        .ref-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+            gap: 0.8rem;
+            margin-top: 1.5rem;
         }
         .ref-item {
-            background: rgba(255,255,255,0.4);
-            padding: 0.6rem 0.8rem;
-            border-radius: 0.8rem;
+            background: rgba(255,255,255,0.5);
+            backdrop-filter: blur(5px);
+            padding: 0.8rem 1rem;
+            border-radius: 1rem;
             border: 1px solid #CCCFC2;
+            font-size: 0.7rem;
+            transition: all 0.3s;
+            word-break: break-word;
+        }
+        .ref-item.highlight {
+            background: rgba(76,110,32,0.2);
+            border-color: #4C6E20;
+            transform: scale(1.02);
+        }
+        .ref-item em {
+            font-style: italic;
+            color: #4C6E20;
         }
 
         footer {
@@ -288,115 +343,112 @@
     </style>
 </head>
 <body>
-<!-- Partículas flotantes -->
-<div class="particles" id="particles"></div>
-<!-- Barra de progreso -->
+<div class="particle-bg" id="particleBg"></div>
 <div class="progress-bar" id="progressBar"></div>
 
 <div class="container">
     <!-- Hero -->
     <div class="hero">
-        <h1><i class="fas fa-seedling"></i> La geoinformación como eje de la planificación territorial para la resiliencia en SSP</h1>
+        <h1><i class="fas fa-leaf"></i> La geoinformación como eje para la resiliencia en SSP</h1>
         <div class="badge-group">
             <span class="badge"><i class="fas fa-graduation-cap"></i> Maestría en Geoinformación del Territorio</span>
-            <span class="badge badge-light"><i class="fas fa-chalkboard-user"></i> Línea: Procesamiento de imágenes y territorio</span>
+            <span class="badge badge-light"><i class="fas fa-chalkboard-user"></i> Procesamiento de imágenes</span>
             <span class="badge"><i class="fas fa-file-alt"></i> Monografía</span>
         </div>
-        <div class="student-info">David Leonardo Sanabria Garcia | Cód. 1002539596 | Grupo 302697805_1</div>
+        <div class="student-info">David Leonardo Sanabria Garcia · Cód. 1002539596 · Grupo 302697805_1</div>
     </div>
 
-    <!-- Sección 1: Pregunta y objetivos en tarjetas 3D -->
-    <div class="section grid-2col">
-        <div class="card-3d">
-            <h2><i class="fas fa-question-circle"></i> Pregunta de investigación</h2>
-            <p style="font-weight: 500;">¿Cuál es el estado del arte sobre el uso de SIG y teledetección para la transición hacia SSP, y qué vacíos persisten para su escalamiento en Colombia?</p>
-        </div>
-        <div class="card-3d">
-            <h2><i class="fas fa-bullseye"></i> Objetivo general</h2>
-            <p>Sintetizar la evidencia científica global y nacional sobre SIG y teledetección en SSP mediante revisión PRISMA, identificando avances, patrones metodológicos y vacíos para el desarrollo rural colombiano.</p>
-        </div>
-    </div>
-
-    <!-- Línea de tiempo: Objetivos específicos y fundamentos -->
-    <h2 style="margin-bottom: 1rem; font-weight: 700; font-size: 1.4rem;"><i class="fas fa-list-check" style="color:#4C6E20;"></i> Objetivos específicos y fundamentos</h2>
-    <div class="timeline">
-        <div class="timeline-item">
-            <div class="timeline-dot"></div>
-            <div class="timeline-content">
-                <strong><i class="fas fa-satellite-dish" style="color:#4C6E20;"></i> 1.</strong> Caracterizar herramientas geoespaciales (sensores, drones, modelos) y su validación.
-            </div>
-        </div>
-        <div class="timeline-item">
-            <div class="timeline-dot"></div>
-            <div class="timeline-content">
-                <strong><i class="fas fa-layer-group" style="color:#4C6E20;"></i> 2.</strong> Evaluar marcos metodológicos y escalas espaciales predominantes.
-            </div>
-        </div>
-        <div class="timeline-item">
-            <div class="timeline-dot"></div>
-            <div class="timeline-content">
-                <strong><i class="fas fa-chart-line" style="color:#4C6E20;"></i> 3.</strong> Identificar vacíos y barreras de adopción en Colombia, proponiendo lineamientos.
-            </div>
-        </div>
-        <div class="timeline-item">
-            <div class="timeline-dot"></div>
-            <div class="timeline-content">
-                <strong><i class="fas fa-brain" style="color:#4C6E20;"></i> Fundamentos epistemológicos:</strong> Pragmatismo, realismo crítico, transparencia y replicabilidad.
-            </div>
-        </div>
-        <div class="timeline-item">
-            <div class="timeline-dot"></div>
-            <div class="timeline-content">
-                <strong><i class="fas fa-flask" style="color:#4C6E20;"></i> Enfoque mixto · Estudio descriptivo-exploratorio (PRISMA).</strong>
-            </div>
+    <!-- Mapa conceptual SVG interactivo (CENTRO DE CONTROL) -->
+    <h2 style="text-align:center; font-weight:700; margin-bottom:1.5rem;"><i class="fas fa-project-diagram" style="color:#4C6E20;"></i> Explora los componentes metodológicos</h2>
+    <div class="svg-map-section">
+        <div class="svg-map-container">
+            <svg viewBox="0 0 600 350" xmlns="http://www.w3.org/2000/svg">
+                <!-- Fondos decorativos -->
+                <circle cx="300" cy="175" r="140" fill="none" stroke="#CCCFC2" stroke-width="1" stroke-dasharray="6,4" opacity="0.5"/>
+                
+                <!-- Nodo central: Título -->
+                <circle cx="300" cy="175" r="50" fill="#22320A" class="map-node" onclick="openModal('titulo')" style="cursor:pointer;" />
+                <text x="300" y="180" text-anchor="middle" fill="#E8E3E0" font-size="8" font-weight="700" class="map-node-text">PROPUESTA</text>
+                
+                <!-- Nodos secundarios -->
+                <circle cx="150" cy="80" r="35" fill="#4C6E20" class="map-node" onclick="openModal('pregunta')" />
+                <text x="150" y="83" text-anchor="middle" fill="white" font-size="7" font-weight="600" class="map-node-text">Pregunta</text>
+                
+                <circle cx="450" cy="80" r="35" fill="#4C6E20" class="map-node" onclick="openModal('objetivos')" />
+                <text x="450" y="83" text-anchor="middle" fill="white" font-size="7" font-weight="600" class="map-node-text">Objetivos</text>
+                
+                <circle cx="100" cy="220" r="35" fill="#4C6E20" class="map-node" onclick="openModal('fundamentos')" />
+                <text x="100" y="223" text-anchor="middle" fill="white" font-size="6" font-weight="600" class="map-node-text">Epistemología</text>
+                
+                <circle cx="500" cy="220" r="35" fill="#4C6E20" class="map-node" onclick="openModal('muestra')" />
+                <text x="500" y="223" text-anchor="middle" fill="white" font-size="6" font-weight="600" class="map-node-text">Población</text>
+                
+                <circle cx="200" cy="300" r="30" fill="#4C6E20" class="map-node" onclick="openModal('tecnicas')" />
+                <text x="200" y="303" text-anchor="middle" fill="white" font-size="6" font-weight="600" class="map-node-text">Técnicas</text>
+                
+                <circle cx="400" cy="300" r="30" fill="#4C6E20" class="map-node" onclick="openModal('etica')" />
+                <text x="400" y="303" text-anchor="middle" fill="white" font-size="6" font-weight="600" class="map-node-text">Ética</text>
+                
+                <!-- Líneas conectoras -->
+                <line x1="253" y1="153" x2="175" y2="108" stroke="#CCCFC2" stroke-width="2" opacity="0.7"/>
+                <line x1="347" y1="153" x2="425" y2="108" stroke="#CCCFC2" stroke-width="2" opacity="0.7"/>
+                <line x1="255" y1="205" x2="128" y2="207" stroke="#CCCFC2" stroke-width="2" opacity="0.7"/>
+                <line x1="345" y1="205" x2="472" y2="207" stroke="#CCCFC2" stroke-width="2" opacity="0.7"/>
+                <line x1="268" y1="223" x2="215" y2="275" stroke="#CCCFC2" stroke-width="2" opacity="0.7"/>
+                <line x1="332" y1="223" x2="385" y2="275" stroke="#CCCFC2" stroke-width="2" opacity="0.7"/>
+            </svg>
         </div>
     </div>
 
-    <!-- Sección 2: Población, muestra y contexto en tarjetas 3D -->
-    <div class="section grid-2col">
-        <div class="card-3d">
-            <h2><i class="fas fa-database"></i> Población y muestra</h2>
-            <p><strong>Población:</strong> Artículos Scopus, WoS, ScienceDirect (2016-2026) sobre SSP + geoinformación.</p>
-            <p><strong>Unidades:</strong> Estudios con uso explícito de SIG, teledetección, GPS, drones.</p>
-            <p><strong>Muestra estimada:</strong> 150-200 tras flujo PRISMA.</p>
-        </div>
-        <div class="card-3d">
-            <h2><i class="fas fa-map-pin"></i> Contexto y criterios</h2>
-            <p><strong>Ubicación:</strong> Global, énfasis Colombia y América Latina.</p>
-            <p><strong>Inclusión:</strong> Originales, mediciones biofísicas/espaciales, español/inglés.</p>
-            <p><strong>Exclusión:</strong> Opinión, cultivos anuales sin ganado, sin texto completo.</p>
+    <!-- Diagrama PRISMA interactivo -->
+    <h2 style="text-align:center; font-weight:700; margin:2rem 0 1rem;"><i class="fas fa-flowchart" style="color:#4C6E20;"></i> Flujo PRISMA (hover para detalles)</h2>
+    <div class="prisma-section">
+        <div class="prisma-flow">
+            <div class="prisma-step" id="prisma1">
+                <i class="fas fa-search"></i>
+                <div class="step-number">Identificación</div>
+                <div class="prisma-tooltip">Registros en Scopus, WoS, ScienceDirect (2016-2026)</div>
+            </div>
+            <div class="prisma-step" id="prisma2">
+                <i class="fas fa-filter"></i>
+                <div class="step-number">Cribado</div>
+                <div class="prisma-tooltip">Eliminación de duplicados y revisión de títulos/resúmenes</div>
+            </div>
+            <div class="prisma-step" id="prisma3">
+                <i class="fas fa-check-double"></i>
+                <div class="step-number">Elegibilidad</div>
+                <div class="prisma-tooltip">Lectura de texto completo según criterios de inclusión/exclusión</div>
+            </div>
+            <div class="prisma-step" id="prisma4">
+                <i class="fas fa-chart-bar"></i>
+                <div class="step-number">Inclusión</div>
+                <div class="prisma-tooltip">150-200 estudios finales para síntesis y análisis</div>
+            </div>
         </div>
     </div>
 
-    <!-- Sección 3: Técnicas e instrumentos (acordeón elegante) -->
-    <h2 style="margin-bottom: 1rem; font-weight: 700; font-size: 1.4rem;"><i class="fas fa-tools" style="color:#4C6E20;"></i> Técnicas e instrumentos</h2>
-    <details class="accordion" open>
-        <summary><i class="fas fa-search"></i> Recolección de información</summary>
-        <div class="accordion-content">
-            <p>Búsqueda estructurada con cadenas booleanas en Scopus, WoS, ScienceDirect, Google Scholar. Matriz de extracción en Excel/Google Sheets (campos: autores, año, país, herramienta geoespacial, escala, indicadores, resultados, limitaciones). Gestión de referencias con Mendeley. Control de sesgos mediante diagrama de flujo PRISMA y checklist.</p>
-        </div>
-    </details>
-    <details class="accordion" open>
-        <summary><i class="fas fa-chart-pie"></i> Análisis de la información</summary>
-        <div class="accordion-content">
-            <p><strong>Cualitativo:</strong> Análisis de contenido temático (codificación abierta/axial). <strong>Cuantitativo:</strong> Estadística descriptiva, gráficos de radar. <strong>Síntesis narrativa:</strong> Integración por categorías emergentes. Software: Excel, R, NVivo (opcional).</p>
-        </div>
-    </details>
-    <details class="accordion">
-        <summary><i class="fas fa-shield-alt"></i> Consideraciones éticas</summary>
-        <div class="accordion-content">
-            <p>No involucra sujetos humanos ni animales. Integridad académica: APA 7ª, Turnitin. Protocolo registrado en PROSPERO, datos abiertos. Respeto a derechos de autor (acceso biblioteca UNAD).</p>
-        </div>
-    </details>
-
-    <!-- Sección 4: Referencias en grid -->
-    <h2 style="margin-bottom: 1rem; margin-top: 2rem; font-weight: 700; font-size: 1.4rem;"><i class="fas fa-book-open" style="color:#4C6E20;"></i> Referencias (APA 7ª ed.)</h2>
-    <div class="ref-grid">
-        <div class="ref-item">Page, M. J., et al. (2021). PRISMA 2020. <em>Rev. Esp. Cardiol.</em>, 74(9).</div>
-        <div class="ref-item">Diao, Z., et al. (2025). Localization technologies for smart agriculture. <em>Comput. Electron. Agric.</em>, 236.</div>
-        <div class="ref-item">Rivera, J., et al. (2023). <em>Sistemas silvopastoriles</em>. INTA.</div>
-        <div class="ref-item">Morales, N. S., & Zuleta, G. A. (2020). Land degradation indicators. <em>Land Degrad. Dev.</em>, 31(6).</div>
-        <div class="ref-item">Mundy, O., & Mabiso, A. (2022). GIS in IFAD operations. FIDA.</div>
+    <!-- Buscador de referencias -->
+    <h2 style="text-align:center; font-weight:700; margin:2.5rem 0 0.5rem;"><i class="fas fa-book-open" style="color:#4C6E20;"></i> Referencias (filtro dinámico)</h2>
+    <div class="ref-search">
+        <input type="text" id="refFilter" placeholder="Ej: 'agriculture', 'GIS', 'Colombia'..." oninput="filterRefs()">
+    </div>
+    <div class="ref-list" id="refList">
+        <div class="ref-item" data-keywords="blackman adoption livestock latin america">Blackman, A., Muñoz, G., Salazar, L., & Winters, P. (2026). <em>Adoption of sustainable livestock innovations: Evidence from Latin America</em>.</div>
+        <div class="ref-item" data-keywords="bravo regenerativa cepal ganadería">Bravo-Peña, F., et al. (s.f.). <em>Ganadería regenerativa: Definición, caracterización y recomendaciones de políticas</em>. CEPAL.</div>
+        <div class="ref-item" data-keywords="cadavid ganadería sostenible cambio climático">Cadavid, A. Z., et al. (s.f.). <em>Ganadería Sostenible y Adaptación al Cambio Climático</em>.</div>
+        <div class="ref-item" data-keywords="de cos gis multi-threat france land use policy">De Cos, O., et al. (2025). GIS multi-threat models for agricultural land. <em>Land Use Policy</em>, 155.</div>
+        <div class="ref-item" data-keywords="diao localization technologies smart agriculture">Diao, Z., et al. (2025). Localization technologies for smart agriculture. <em>Comput. Electron. Agric.</em>, 236.</div>
+        <div class="ref-item" data-keywords="escobar agroecological soil dairy colombia">Escobar, M., et al. (2020). Agroecological practices on soil in Colombian dairy system. <em>Livestock Research for Rural Development</em>, 32.</div>
+        <div class="ref-item" data-keywords="fao tierras aguas 2025">FAO. (2025). <em>El estado de los recursos de tierras y aguas del mundo 2025</em>.</div>
+        <div class="ref-item" data-keywords="kafle wearable sensors poultry">Kafle, M., et al. (2025). Wearable sensor technologies in poultry. <em>Comput. Electron. Agric.</em>, 239.</div>
+        <div class="ref-item" data-keywords="morales land degradation indicators">Morales, N. S., & Zuleta, G. A. (2020). Land degradation indicators. <em>Land Degrad. Dev.</em>, 31(6).</div>
+        <div class="ref-item" data-keywords="mundy gis ifad geome">Mundy, O., & Mabiso, A. (2022). Systematic integration of GIS in IFAD operations (GeoM&E). FIDA.</div>
+        <div class="ref-item" data-keywords="nicholls agroecological assessment farm">Nicholls, C. I., et al. (2020). Assessing the agroecological status of a farm. <em>Agro Sur</em>, 48(2).</div>
+        <div class="ref-item" data-keywords="parra digital agri-biodiversity europe">Parra-López, C., & Carmona-Torres, C. (2026). Digital technologies in agri-biodiversity. <em>Technology in Society</em>, 85.</div>
+        <div class="ref-item" data-keywords="rahman deep learning animal farming">Rahman, Z. U., et al. (2025). Advancing animal farming with deep learning. <em>Comput. Electron. Agric.</em>, 237.</div>
+        <div class="ref-item" data-keywords="rivera sistemas silvopastoriles">Rivera, J., et al. (2023). <em>Sistemas silvopastoriles: Hacia una diversificación sostenible</em>. INTA.</div>
+        <div class="ref-item" data-keywords="salvador ganadería climáticamente inteligente ecuador">Salvador, D. (2017). <em>Ganadería climáticamente inteligente</em>. BIOPASOS.</div>
+        <div class="ref-item" data-keywords="page prisma 2020">Page, M. J., et al. (2021). PRISMA 2020. <em>Rev. Esp. Cardiol.</em>, 74(9).</div>
     </div>
 
     <footer>
@@ -404,20 +456,33 @@
     </footer>
 </div>
 
+<!-- MODAL oculto para mostrar detalles -->
+<div class="modal-overlay" id="modal">
+    <div class="modal-window">
+        <button class="modal-close" onclick="closeModal()">&times;</button>
+        <div id="modalBody"></div>
+    </div>
+</div>
+
 <script>
-    // Partículas flotantes dinámicas
-    const particlesContainer = document.getElementById('particles');
-    for (let i = 0; i < 25; i++) {
-        const particle = document.createElement('div');
-        particle.className = 'particle';
-        const size = Math.random() * 8 + 4;
-        particle.style.width = size + 'px';
-        particle.style.height = size + 'px';
-        particle.style.left = Math.random() * 100 + '%';
-        particle.style.animationDuration = Math.random() * 12 + 8 + 's';
-        particle.style.animationDelay = Math.random() * 10 + 's';
-        particlesContainer.appendChild(particle);
+    // Partículas dinámicas que reaccionan al mouse
+    const bg = document.getElementById('particleBg');
+    const particles = [];
+    for (let i = 0; i < 40; i++) {
+        const p = document.createElement('div');
+        p.style.cssText = `position:absolute; border-radius:50%; background:rgba(76,110,32,0.2); width:${Math.random()*6+2}px; height:${Math.random()*6+2}px; left:${Math.random()*100}%; top:${Math.random()*100}%; transition: transform 0.1s;`;
+        bg.appendChild(p);
+        particles.push(p);
     }
+    document.addEventListener('mousemove', (e) => {
+        const x = e.clientX / window.innerWidth;
+        const y = e.clientY / window.innerHeight;
+        particles.forEach((p, i) => {
+            const moveX = (x - 0.5) * (i % 5 + 2) * 8;
+            const moveY = (y - 0.5) * (i % 5 + 2) * 8;
+            p.style.transform = `translate(${moveX}px, ${moveY}px)`;
+        });
+    });
 
     // Barra de progreso
     window.addEventListener('scroll', () => {
@@ -427,33 +492,99 @@
         document.getElementById('progressBar').style.width = scrolled + '%';
     });
 
-    // Animación de entrada con Intersection Observer
-    const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                entry.target.classList.add('visible');
+    // Contenido de los modales (toda tu información)
+    const modalData = {
+        titulo: {
+            title: 'Propuesta de grado',
+            icon: 'fa-file-signature',
+            content: `<p><strong>Título:</strong> La geoinformación como eje de la planificación territorial para la resiliencia en sistemas agrosilvopastoriles: revisión sistemática PRISMA.</p>
+            <p><strong>Estudiante:</strong> David Leonardo Sanabria Garcia<br>
+            <strong>Maestría:</strong> Geoinformación del Territorio<br>
+            <strong>Línea:</strong> Procesamiento de imágenes y territorio / Planeación territorial<br>
+            <strong>Modalidad:</strong> Monografía (revisión sistemática de literatura)</p>`
+        },
+        pregunta: {
+            title: 'Pregunta de investigación',
+            icon: 'fa-question-circle',
+            content: `<p><strong>¿Cuál es el estado del arte sobre el uso de SIG y teledetección para la transición hacia SSP, y qué vacíos persisten para su escalamiento en Colombia?</strong></p>
+            <p>Se enfoca en literatura global y nacional de los últimos 10 años, identificando herramientas, metodologías y limitantes para el contexto rural colombiano.</p>`
+        },
+        objetivos: {
+            title: 'Objetivos',
+            icon: 'fa-bullseye',
+            content: `<p><strong>General:</strong> Sintetizar la evidencia científica sobre SIG y teledetección en SSP mediante revisión PRISMA, identificando avances, patrones y vacíos.</p>
+            <p><strong>Específicos:</strong></p>
+            <ol>
+                <li>Caracterizar herramientas geoespaciales (sensores, drones, modelos) y su validación.</li>
+                <li>Evaluar marcos metodológicos y escalas espaciales predominantes.</li>
+                <li>Identificar vacíos y barreras de adopción en Colombia, proponiendo lineamientos.</li>
+            </ol>`
+        },
+        fundamentos: {
+            title: 'Fundamentos epistemológicos',
+            icon: 'fa-brain',
+            content: `<p><strong>Epistemología:</strong> Pragmatismo (utilidad del conocimiento sintetizado).</p>
+            <p><strong>Ontología:</strong> Realismo crítico.</p>
+            <p><strong>Axiología:</strong> Transparencia, replicabilidad y compromiso con la sostenibilidad territorial.</p>
+            <hr style="margin:1rem 0; border-color:#CCCFC2;">
+            <p><strong>Enfoque:</strong> Mixto (cuali-cuantitativo).</p>
+            <p><strong>Tipo de estudio:</strong> Descriptivo-exploratorio (revisión sistemática PRISMA).</p>`
+        },
+        muestra: {
+            title: 'Población y muestra',
+            icon: 'fa-database',
+            content: `<p><strong>Población:</strong> Artículos Scopus, WoS, ScienceDirect (2016-2026) sobre SSP + geoinformación.</p>
+            <p><strong>Muestra estimada:</strong> 150-200 tras filtros PRISMA.</p>
+            <p><strong>Criterios de inclusión:</strong> Uso explícito de SIG/teledetección, español/inglés, texto completo.</p>
+            <p><strong>Contexto:</strong> Global, énfasis en Colombia y América Latina.</p>`
+        },
+        tecnicas: {
+            title: 'Técnicas e instrumentos',
+            icon: 'fa-tools',
+            content: `<p><strong>Recolección:</strong> Búsqueda booleana, matriz en Excel, Mendeley, diagrama PRISMA.</p>
+            <p><strong>Análisis:</strong> Contenido temático (cualitativo), estadística descriptiva (cuantitativo), gráficos radar, síntesis narrativa. Software: Excel, R, NVivo.</p>`
+        },
+        etica: {
+            title: 'Consideraciones éticas',
+            icon: 'fa-shield-alt',
+            content: `<p>No involucra sujetos humanos/animales. Integridad académica: citación APA 7ª, antiplagio Turnitin. Protocolo registrado, datos abiertos. Respeto a derechos de autor (acceso biblioteca UNAD).</p>`
+        }
+    };
+
+    // Abrir modal y llenar contenido
+    function openModal(key) {
+        const data = modalData[key];
+        if (!data) return;
+        document.getElementById('modalBody').innerHTML = `
+            <h2><i class="fas ${data.icon}" style="color:#4C6E20;"></i> ${data.title}</h2>
+            <div class="modal-content">${data.content}</div>`;
+        document.getElementById('modal').classList.add('active');
+    }
+
+    // Cerrar modal
+    function closeModal() {
+        document.getElementById('modal').classList.remove('active');
+    }
+    document.getElementById('modal').addEventListener('click', function(e) {
+        if (e.target === this) closeModal();
+    });
+
+    // Filtro de referencias
+    function filterRefs() {
+        const input = document.getElementById('refFilter');
+        const filter = input.value.toLowerCase();
+        const items = document.querySelectorAll('#refList .ref-item');
+        items.forEach(item => {
+            const keywords = item.getAttribute('data-keywords') || '';
+            if (keywords.includes(filter) || filter === '') {
+                item.classList.add('highlight');
+                item.style.display = '';
+            } else {
+                item.classList.remove('highlight');
+                item.style.display = 'none';
             }
         });
-    }, { threshold: 0.15 });
-
-    document.querySelectorAll('.section, .timeline-item').forEach(el => observer.observe(el));
-
-    // Efecto parallax 3D sutil en tarjetas con mouse (solo desktop)
-    document.querySelectorAll('.card-3d').forEach(card => {
-        card.addEventListener('mousemove', (e) => {
-            const rect = card.getBoundingClientRect();
-            const x = e.clientX - rect.left;
-            const y = e.clientY - rect.top;
-            const centerX = rect.width / 2;
-            const centerY = rect.height / 2;
-            const rotateX = ((y - centerY) / centerY) * -5; // max 5deg
-            const rotateY = ((x - centerX) / centerX) * 5;
-            card.style.transform = `perspective(800px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateZ(10px)`;
-        });
-        card.addEventListener('mouseleave', () => {
-            card.style.transform = 'perspective(800px) rotateX(0) rotateY(0) translateZ(0)';
-        });
-    });
+    }
 </script>
 </body>
 </html>
