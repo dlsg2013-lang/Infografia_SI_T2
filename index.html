@@ -197,6 +197,8 @@
             overflow: hidden;
             transform-style: preserve-3d;
             perspective: 800px;
+            display: flex;
+            flex-direction: column;
         }
         .info-card:hover {
             transform: translateY(-8px) rotateX(2deg) rotateY(2deg);
@@ -224,6 +226,7 @@
             transform: translateX(3px);
         }
         .info-card p {
+            flex: 1;
             font-size: 0.85rem;
             line-height: 1.6;
             color: var(--dark);
@@ -247,6 +250,27 @@
         }
         .info-card:hover .card-tag {
             background: rgba(76, 110, 32, 0.2);
+        }
+        /* Etiqueta de clic */
+        .click-hint {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.35rem;
+            margin-top: 0.8rem;
+            font-size: 0.7rem;
+            font-weight: 600;
+            color: var(--green);
+            opacity: 0.7;
+            transition: opacity 0.3s, transform 0.3s;
+            letter-spacing: 0.3px;
+            pointer-events: none;
+        }
+        .info-card:hover .click-hint {
+            opacity: 1;
+            transform: translateX(4px);
+        }
+        .click-hint i {
+            font-size: 0.75rem;
         }
 
         /* Diagrama PRISMA */
@@ -301,7 +325,7 @@
             color: var(--green);
             transition: transform 0.3s;
         }
-        .prisma-node:hover + .prisma-arrow,
+        .prisma-node:hover+.prisma-arrow,
         .prisma-arrow:hover {
             transform: scale(1.2);
         }
@@ -527,6 +551,13 @@
             border-radius: 0.5rem;
             margin: 1rem 0;
         }
+        .highlight-box-alt {
+            background: rgba(76, 110, 32, 0.04);
+            border-left: 3px solid var(--dark);
+            padding: 0.8rem 1rem;
+            border-radius: 0.5rem;
+            margin: 1rem 0;
+        }
 
         footer {
             text-align: center;
@@ -572,6 +603,7 @@
                     <p>¿Cuál es el estado del arte sobre el uso de SIG y teledetección para la transición hacia SSP, y qué vacíos persisten para su escalamiento en Colombia?</p>
                     <span class="card-tag">Revisión sistemática</span>
                     <span class="card-tag">Literatura global y nacional</span>
+                    <span class="click-hint"><i class="fas fa-hand-pointer"></i> Click para ampliar</span>
                 </div>
                 <div class="info-card" onclick="openModal('objetivos')">
                     <div class="card-icon"><i class="fas fa-list-check"></i></div>
@@ -579,6 +611,7 @@
                     <p><strong>General:</strong> Sintetizar la evidencia científica sobre SIG y teledetección en SSP mediante revisión PRISMA.</p>
                     <span class="card-tag">3 objetivos específicos</span>
                     <span class="card-tag">Enfoque mixto</span>
+                    <span class="click-hint"><i class="fas fa-hand-pointer"></i> Click para ampliar</span>
                 </div>
                 <div class="info-card" onclick="openModal('fundamentos')">
                     <div class="card-icon"><i class="fas fa-brain"></i></div>
@@ -587,6 +620,7 @@
                     <span class="card-tag">Epistemología</span>
                     <span class="card-tag">Ontología</span>
                     <span class="card-tag">Axiología</span>
+                    <span class="click-hint"><i class="fas fa-hand-pointer"></i> Click para ampliar</span>
                 </div>
                 <div class="info-card" onclick="openModal('poblacion')">
                     <div class="card-icon"><i class="fas fa-database"></i></div>
@@ -594,6 +628,7 @@
                     <p>Artículos en Scopus, WoS, ScienceDirect (2016-2026). Muestra estimada: 150-200 tras flujo PRISMA 2020.</p>
                     <span class="card-tag">n ≈ 150-200</span>
                     <span class="card-tag">3 bases de datos</span>
+                    <span class="click-hint"><i class="fas fa-hand-pointer"></i> Click para ampliar</span>
                 </div>
                 <div class="info-card" onclick="openModal('tecnicas')">
                     <div class="card-icon"><i class="fas fa-tools"></i></div>
@@ -601,6 +636,7 @@
                     <p>Matriz de extracción en Excel, Mendeley, búsqueda booleana, diagrama PRISMA, análisis de contenido temático.</p>
                     <span class="card-tag">Cualitativo</span>
                     <span class="card-tag">Cuantitativo</span>
+                    <span class="click-hint"><i class="fas fa-hand-pointer"></i> Click para ampliar</span>
                 </div>
                 <div class="info-card" onclick="openModal('etica')">
                     <div class="card-icon"><i class="fas fa-shield-alt"></i></div>
@@ -608,6 +644,7 @@
                     <p>Sin sujetos humanos. Integridad académica: APA 7ª, Turnitin. Protocolo PROSPERO, datos abiertos.</p>
                     <span class="card-tag">APA 7ª ed.</span>
                     <span class="card-tag">Acceso abierto</span>
+                    <span class="click-hint"><i class="fas fa-hand-pointer"></i> Click para ampliar</span>
                 </div>
             </div>
         </div>
@@ -873,21 +910,43 @@
                 <p><strong>Contexto:</strong> El trabajo se desarrolla desde la UNAD con uso de la H-Biblioteca, con revisión de literatura global, pero con énfasis en estudios realizados en Colombia y América Latina para el análisis contextual.</p>`
             },
             tecnicas: {
-                title: 'Técnicas e instrumentos',
+                title: 'Técnicas e instrumentos de recolección y análisis',
                 icon: 'fa-tools',
-                content: `<p><strong>Recolección de información:</strong></p>
+                content: `
+                <p><strong>RECOLECCIÓN DE INFORMACIÓN</strong></p>
+                <p><em>1. Revisión sistematizada de literatura científica (base del estudio):</em></p>
                 <ul>
-                    <li>Búsqueda estructurada: Cadenas booleanas en Scopus, WoS, ScienceDirect, Google Scholar.</li>
-                    <li>Instrumento: Matriz de extracción de datos en Excel / Google Sheets (campos: autores, año, país, herramienta geoespacial usada, escala, indicadores, resultados principales, limitaciones declaradas).</li>
-                    <li>Gestión de referencias: Mendeley.</li>
-                    <li>Control de sesgos: Diagrama de flujo PRISMA y lista de verificación (checklist).</li>
+                    <li><strong>Instrumento principal:</strong> Matriz de extracción de datos en Excel / Google Sheets, diseñada con campos estandarizados: autores, año, país, herramienta geoespacial usada (SIG, drone, satélite, GPS), escala espacial (finca, paisaje, región), indicadores biofísicos (NDVI, biomasa, carbono, uso del suelo), resultados principales, limitaciones declaradas y calidad metodológica (escala SANRA/AMSTAR-2).</li>
+                    <li><strong>Búsqueda booleana estructurada:</strong> Cadenas diseñadas con operadores AND/OR, probadas en Scopus, Web of Science y ScienceDirect. Ejemplo: <em>("silvopastoral" OR "agroforestry" OR "silvopasture") AND ("GIS" OR "remote sensing" OR "drone" OR "satellite imagery") AND ("land planning" OR "resilience" OR "sustainability")</em>. Se documentan las estrategias completas (ítem 7 PRISMA).</li>
+                    <li><strong>Gestión de referencias:</strong> Mendeley para eliminación de duplicados, organización por carpetas temáticas y generación de bibliografía en APA 7ª.</li>
+                    <li><strong>Control de sesgos:</strong> Diagrama de flujo PRISMA 2020 con cuatro fases (identificación, cribado, elegibilidad, inclusión) y lista de verificación de 27 ítems. Doble revisor independiente en las fases de cribado y elegibilidad.</li>
+                    <li><strong>Información recolectada:</strong> Datos cuantitativos (frecuencias de herramientas, escalas, países, índices espectrales, precisión reportada) y cualitativos (narrativas sobre barreras de adopción, vacíos metodológicos, recomendaciones de política).</li>
                 </ul>
-                <p><strong>Análisis de la información:</strong></p>
+                <p><em>2. Encuestas semiestructuradas a expertos (técnica complementaria de validación contextual):</em></p>
                 <ul>
-                    <li><strong>Cualitativo:</strong> Análisis de contenido temático.</li>
-                    <li><strong>Cuantitativo:</strong> Estadística descriptiva (frecuencias de herramientas, escalas, países); gráficos de barras y diagramas de radar (spider charts).</li>
-                    <li><strong>Síntesis narrativa:</strong> Integración de hallazgos por categorías emergentes.</li>
-                </ul>`
+                    <li><strong>Objeto claro de las preguntas:</strong> Validar los hallazgos de la revisión sistemática con actores clave del contexto colombiano (investigadores, extensionistas, tomadores de decisión). Las preguntas se enfocan en: (a) pertinencia de las herramientas geoespaciales identificadas para las condiciones rurales de Colombia, (b) barreras específicas de adopción tecnológica (costos, conectividad, capacitación), (c) vacíos de investigación que desde su experiencia consideran prioritarios, y (d) lineamientos para el escalamiento de SSP con soporte geoespacial.</li>
+                    <li><strong>Instrumento:</strong> Cuestionario semiestructurado con preguntas abiertas y cerradas, aplicado de forma virtual (Google Forms) a una muestra intencional de 8-12 expertos, asegurando representatividad de diferentes regiones del país. Las preguntas abiertas permiten profundizar en percepciones y experiencias no capturadas por la literatura.</li>
+                    <li><strong>Información recolectada:</strong> Opiniones cualitativas sobre viabilidad técnica y operativa de las herramientas geoespaciales, identificación de cuellos de botella institucionales y recomendaciones prácticas para el escalamiento de SSP.</li>
+                </ul>
+
+                <p><strong>ANÁLISIS DE LA INFORMACIÓN</strong></p>
+                <p><em>3. Análisis de contenido temático (cualitativo):</em></p>
+                <ul>
+                    <li>Se basa en la <strong>recolección sistematizada de literatura científica</strong> descrita anteriormente. Los textos completos de los artículos incluidos se codifican mediante análisis temático en tres niveles: (a) categorías predefinidas (tipo de herramienta geoespacial, escala de análisis, variable biofísica medida), (b) categorías emergentes (barreras institucionales, oportunidades de política pública, limitaciones técnicas no previstas), y (c) patrones transversales (relación entre precisión tecnológica y escala de aplicación, brecha entre investigación global y contexto colombiano).</li>
+                    <li><strong>Software de apoyo:</strong> Atlas.ti o NVivo para la codificación sistemática de fragmentos textuales, facilitando la trazabilidad y la saturación de categorías.</li>
+                </ul>
+                <p><em>4. Análisis estadístico descriptivo (cuantitativo):</em></p>
+                <ul>
+                    <li>Estadística descriptiva de frecuencias y porcentajes sobre los campos de la matriz de extracción (número de estudios por país, por tipo de sensor, por escala, por año). Visualización mediante gráficos de barras, diagramas de radar (spider charts) y mapas coropléticos para la distribución geográfica de los estudios.</li>
+                </ul>
+                <p><em>5. Síntesis narrativa (integración mixta):</em></p>
+                <ul>
+                    <li><strong>Descripción detallada de cada instrumento y su rol:</strong> La matriz de extracción (instrumento 1) alimenta directamente los indicadores cuantitativos (frecuencias, precisiones) y cualitativos (barreras, vacíos). Las encuestas semiestructuradas (instrumento 2) aportan la perspectiva contextualizada de expertos colombianos, permitiendo contrastar los hallazgos de la literatura global con la realidad local.</li>
+                    <li><strong>Información recolectada y su propósito:</strong> La literatura aporta el estado del arte global (qué herramientas se usan, con qué precisión, en qué escalas). Las encuestas aportan la validación de pertinencia para Colombia (¿es viable usar drones en el Caquetá? ¿qué limitaciones de conectividad existen?). Juntas permiten construir lineamientos de escalamiento basados en evidencia y contextualizados.</li>
+                    <li><strong>Dificultades encontradas en la recolección:</strong> (a) Heterogeneidad de los estudios en la literatura: diferentes métricas, escalas y terminologías dificultan la comparación directa. Esto conllevó a utilizar una matriz de extracción flexible pero rigurosa, con campos estandarizados que permiten normalizar la información. (b) Acceso limitado a texto completo de algunos artículos, lo que obligó a usar los recursos de la H-Biblioteca UNAD y solicitar copias a autores cuando fue necesario. (c) Baja tasa de respuesta en encuestas a expertos, lo que llevó a ampliar el período de recolección y a diversificar los canales de contacto (correo institucional, redes académicas, eventos virtuales).</li>
+                    <li><strong>Razones para utilizar estas técnicas:</strong> La revisión sistematizada (técnica 1) garantiza rigurosidad, replicabilidad y transparencia (exigencia PRISMA). Las encuestas semiestructuradas (técnica 2) se incorporan porque la literatura científica global no siempre captura las particularidades del contexto rural colombiano (conectividad, tenencia de la tierra, capacidades técnicas locales), y era necesario un mecanismo para validar y contextualizar los hallazgos. El análisis de contenido temático (técnica 3) permite extraer patrones narrativos que los números por sí solos no revelan. La estadística descriptiva (técnica 4) facilita la presentación visual de tendencias. La síntesis narrativa (técnica 5) integra ambos mundos en una interpretación coherente que responde directamente a la pregunta de investigación.</li>
+                </ul>
+                <div class="highlight-box"><strong>Indicadores clave:</strong> Número de estudios por herramienta geoespacial, precisión promedio reportada (RMSE, R²), distribución por escala de análisis (finca/paisaje/región), frecuencia de barreras mencionadas (cualitativas), nivel de coincidencia entre expertos sobre vacíos prioritarios.</div>`
             },
             etica: {
                 title: 'Consideraciones éticas',
