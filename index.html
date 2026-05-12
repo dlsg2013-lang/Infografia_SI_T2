@@ -909,7 +909,7 @@
                 <p><strong>Tamaño de muestra:</strong> No se fija a priori; se determina por saturación y aplicando el flujo PRISMA.</p>
                 <p><strong>Contexto:</strong> El trabajo se desarrolla desde la UNAD con uso de la H-Biblioteca, con revisión de literatura global, pero con énfasis en estudios realizados en Colombia y América Latina para el análisis contextual.</p>`
             },
-            tecnicas: {
+           tecnicas: {
                 title: 'Técnicas e instrumentos de recolección y análisis',
                 icon: 'fa-tools',
                 content: `
@@ -933,11 +933,11 @@
                 <p><em>3. Análisis de contenido temático (cualitativo):</em></p>
                 <ul>
                     <li>Se basa en la <strong>recolección sistematizada de literatura científica</strong> descrita anteriormente. Los textos completos de los artículos incluidos se codifican mediante análisis temático en tres niveles: (a) categorías predefinidas (tipo de herramienta geoespacial, escala de análisis, variable biofísica medida), (b) categorías emergentes (barreras institucionales, oportunidades de política pública, limitaciones técnicas no previstas), y (c) patrones transversales (relación entre precisión tecnológica y escala de aplicación, brecha entre investigación global y contexto colombiano).</li>
-                    <li><strong>Software de apoyo:</strong> Atlas.ti o NVivo para la codificación sistemática de fragmentos textuales, facilitando la trazabilidad y la saturación de categorías.</li>
+                    <li><strong>Software gratuito de apoyo:</strong> <em>RStudio</em> con paquetes especializados para análisis cualitativo y codificación de textos. Se emplea principalmente <strong>RQDA</strong> (R Qualitative Data Analysis) que permite crear códigos, categorías, memos y visualizar relaciones, manteniendo total trazabilidad y facilitando la saturación de categorías. Alternativamente, se utilizan los paquetes <strong>tidytext</strong> y <strong>quanteda</strong> para procesamiento de corpus textual y análisis de frecuencia cuando se requiera un enfoque más cuantitativo del texto. Esta elección garantiza gratuidad, reproducibilidad y transparencia del proceso analítico.</li>
                 </ul>
                 <p><em>4. Análisis estadístico descriptivo (cuantitativo):</em></p>
                 <ul>
-                    <li>Estadística descriptiva de frecuencias y porcentajes sobre los campos de la matriz de extracción (número de estudios por país, por tipo de sensor, por escala, por año). Visualización mediante gráficos de barras, diagramas de radar (spider charts) y mapas coropléticos para la distribución geográfica de los estudios.</li>
+                    <li>Estadística descriptiva de frecuencias y porcentajes sobre los campos de la matriz de extracción (número de estudios por país, por tipo de sensor, por escala, por año). Visualización mediante gráficos de barras, diagramas de radar (spider charts) y mapas coropléticos para la distribución geográfica de los estudios. Se utiliza <strong>RStudio</strong> con librerías como ggplot2, sf y tmap, garantizando herramientas gratuitas y reproducibles.</li>
                 </ul>
                 <p><em>5. Síntesis narrativa (integración mixta):</em></p>
                 <ul>
@@ -1027,3 +1027,4 @@
     </script>
 </body>
 </html>
+```
